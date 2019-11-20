@@ -471,9 +471,7 @@ render(siteMainElement, createBoardTemplate());
 const taskListElement = siteMainElement.querySelector(`.board__tasks`);
 render(taskListElement, createTaskEditTemplate());
 
-for (let i = 0; i < TASK_COUNT; i++) {
-  render(taskListElement, createTaskTemplate());
-}
+new Array(TASK_COUNT).fill(``).forEach(() => render(taskListElement, createTaskTemplate()));
 
-const BoardElement = siteMainElement.querySelector(`.board`);
-render(BoardElement, createLoadMoreButtonTemplate());
+const boardElement = siteMainElement.querySelector(`.board`);
+render(boardElement, createLoadMoreButtonTemplate());
