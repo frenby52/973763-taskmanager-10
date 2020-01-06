@@ -1,5 +1,6 @@
 import AbstractComponent from './abstract-component.js';
 import {formatTime, formatDate} from '../utils/common.js';
+import {isOverdueDate} from '../utils/common.js';
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -29,13 +30,14 @@ const createButtonMarkup = (name, isActive) => {
 const createTaskTemplate = (task) => {
   // Все работу производим заранее. Внутри шаблонной строки никаких вычислений не делаем,
   // потому что внутри большой разметки сложно искать какой-либо код.
-  const {description, tags, dueDate, color, repeatingDays} = task;
+  const {description: notSanitizedDescription, tags, dueDate, color, repeatingDays} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
   const isDateShowing = !!dueDate;
 
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
+  const description = window.he.encode(notSanitizedDescription);
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const editButton = createButtonMarkup(`edit`, true);
